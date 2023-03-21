@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 """The run script"""
-import logging
 import json
+import logging
 
 from flywheel_gear_toolkit import GearToolkitContext
 
+from fw_gear_file_validator.loaders import FwLoader
 from fw_gear_file_validator.main import run
 from fw_gear_file_validator.parser import parse_config
 from fw_gear_file_validator.utils import (
@@ -12,8 +13,6 @@ from fw_gear_file_validator.utils import (
     handle_metadata,
     save_errors,
 )
-
-from fw_gear_file_validator.loaders import FwLoader
 from fw_gear_file_validator.validator import JsonValidator
 
 log = logging.getLogger(__name__)
@@ -29,12 +28,14 @@ def main(context: GearToolkitContext) -> None:  # pragma: no cover
         file_type,
         add_parents,
         schema_path,
-        reference
+        reference,
     ) = parse_config(context)
 
     # loading input dict
     if validation_level == "file":
-        loader = FileLoader(file_type=...)  # uniffied loader for JSON, YAML, XML, CSV, etc.
+        loader = FileLoader(
+            file_type=...
+        )  # uniffied loader for JSON, YAML, XML, CSV, etc.
         d = loader.load(context.get_input_path("input_file"))
         schema = loader.load_schema(schema_path)
     elif validation_level == "flywheel":

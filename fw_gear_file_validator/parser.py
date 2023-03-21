@@ -32,14 +32,7 @@ def parse_config(
     else:
         reference = context.destination
 
-    return (
-        debug,
-        tag,
-        validation_level,
-        add_parents,
-        schema_file_path,
-        reference
-    )
+    return (debug, tag, validation_level, add_parents, schema_file_path, reference)
 
 
 def identify_file_type(input_file: dict) -> str:

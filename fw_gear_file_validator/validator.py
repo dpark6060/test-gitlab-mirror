@@ -1,5 +1,6 @@
-import typing as t
 import json
+import typing as t
+
 import jsonschema
 
 

@@ -2,9 +2,9 @@ import csv
 import typing as t
 from pathlib import Path
 
+import flywheel
 from flywheel_gear_toolkit import GearToolkitContext
 from flywheel_gear_toolkit.utils.datatypes import Container
-import flywheel
 
 PARENT_INCLUDE = [
     # General values

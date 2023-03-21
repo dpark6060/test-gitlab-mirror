@@ -2,8 +2,8 @@ import json
 import typing as t
 from abc import ABC, abstractmethod
 from pathlib import Path
-import flywheel
 
+import flywheel
 from flywheel_gear_toolkit import GearToolkitContext
 
 from fw_gear_file_validator.utils import get_parents_hierarchy
