@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 """The run script"""
 import logging
+import json
 
 from flywheel_gear_toolkit import GearToolkitContext
 
@@ -12,30 +13,45 @@ from fw_gear_file_validator.utils import (
     save_errors,
 )
 
+from fw_gear_file_validator.loaders import FwLoader
+from fw_gear_file_validator.validator import JsonValidator
+
 log = logging.getLogger(__name__)
 
 
 def main(context: GearToolkitContext) -> None:  # pragma: no cover
     """Parses gear config, runs main algorithm, and performs flywheel-specific actions."""
 
-    # Call parse_config to extract the args, kwargs from the context
-    # (e.g. config.json).
     (
         debug,
         tag,
         validation_level,
-        schema,
-        input_json,
-        flywheel_hierarchy,
-        strategy,
+        file_type,
+        add_parents,
+        schema_path,
+        reference
     ) = parse_config(context)
 
-    # Generate a flywheel hierarchy json regardless of the level, it will be used
-    # to populate flywheel hierarchy information later on of there are errors,
-    # even if just the file is being validated.
+    # loading input dict
+    if validation_level == "file":
+        loader = FileLoader(file_type=...)  # uniffied loader for JSON, YAML, XML, CSV, etc.
+        d = loader.load(context.get_input_path("input_file"))
+        schema = loader.load_schema(schema_path)
+    elif validation_level == "flywheel":
+        loader = FwLoader(
+            context=context,
+            add_parents=add_parents,
+        )
+        d = loader.load(reference)
+        schema = loader.load_schema(schema_path)
+    else:
+        raise ValueError(f"Validation level {validation_level} unsupported")
 
-    valid, errors = run(schema, input_json)
+    # Validate
+    validator = JsonValidator(schema)
+    valid, errors = validator.validate(d)
 
+    # Format output
     errors = add_flywheel_location_to_errors(
         flywheel_hierarchy, validation_level, errors
     )

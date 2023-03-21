@@ -1,5 +1,5 @@
 import typing as t
-
+import json
 import jsonschema
 
 
@@ -9,17 +9,23 @@ class JsonValidator:
     def __init__(self, schema: dict):
         self.validator = jsonschema.Draft7Validator(schema)
 
-    def validate(self, json_object: dict) -> t.Tuple[bool, t.List[t.Dict]]:
-        valid, errors = self.process(json_object)
+    @classmethod
+    def from_file(cls, schema_path: t):
+        with open(schema_path, "r") as fp:
+            schema = json.load(fp)
+            return cls(schema)
+
+    def validate(self, d: dict) -> t.Tuple[bool, t.List[t.Dict]]:
+        valid, errors = self.process(d)
         return valid, errors
 
-    def process(self, json_object: dict) -> t.Tuple[bool, t.List[t.Dict]]:
-        """validates a json dict object."""
+    def process(self, d: dict) -> t.Tuple[bool, t.List[t.Dict]]:
+        """validates a dict object."""
 
-        valid = self.validator.is_valid(json_object)
+        valid = self.validator.is_valid(d)
         if valid:
             return valid, {}
-        errors = self.validator.iter_errors(json_object)
+        errors = self.validator.iter_errors(d)
         packaged_errors = self.handle_errors(errors)
         return valid, packaged_errors
 

@@ -3,7 +3,7 @@ import os
 import flywheel
 import flywheel_gear_toolkit
 
-from fw_gear_file_validator.validators import loaders
+from fw_gear_file_validator import loaders
 
 client = flywheel.Client(os.environ["FWGA_API"])
 context = flywheel_gear_toolkit.GearToolkitContext(

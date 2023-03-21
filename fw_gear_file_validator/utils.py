@@ -1,12 +1,10 @@
 import csv
-import json
 import typing as t
 from pathlib import Path
 
 from flywheel_gear_toolkit import GearToolkitContext
 from flywheel_gear_toolkit.utils.datatypes import Container
-
-from fw_gear_file_validator.validators import loaders
+import flywheel
 
 PARENT_INCLUDE = [
     # General values
@@ -14,9 +12,11 @@ PARENT_INCLUDE = [
     "info",
     "uid",
     # Session values
+    "label",
     "age",
     "weight",
     # Subject values
+    "label",
     "sex",
     "cohort",
     "mlset",
@@ -131,22 +131,20 @@ def create_metadata(context: GearToolkitContext, valid: bool, input_object: Cont
     )
 
 
-def make_fw_metadata(context: GearToolkitContext, container: Container) -> Path:
-    """Creates a file that is the json representation of the flywheel hierarchy containing the file and its parents"""
-    container_type = container.get("container_type", "file")
-    flywheel_meta_object = {container_type: container.to_dict()}
+def get_parents_hierarchy(client: flywheel.Client, container: Container) -> dict:
+    """Returns Creates a file that is the json representation of the flywheel hierarchy containing the file and its parents"""
+    parents_hierarchy = {}
     parents = container.parents
     for parent, p_id in parents.items():
         if p_id is None or parent == "group":
             continue
-        getter = getattr(context.client, f"get_{parent}")
+        getter = getattr(client, f"get_{parent}")
         parent_object = getter(p_id)
-        flywheel_meta_object[parent] = {
+        parents_hierarchy[parent] = {
             k: v for k, v in parent_object.to_dict().items() if k in PARENT_INCLUDE
         }
-        flywheel_meta_object[parent] = parent_object.to_dict()
 
-    return flywheel_meta_object
+    return parents_hierarchy
 
 
 def handle_metadata(context, strategy, valid, tag):

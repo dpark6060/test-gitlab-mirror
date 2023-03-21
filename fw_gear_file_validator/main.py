@@ -2,15 +2,14 @@
 
 import logging
 import typing as t
-from pathlib import Path
 
-from fw_gear_file_validator.validators import validator
+from fw_gear_file_validator import validator
 
 log = logging.getLogger(__name__)
 
 
 def run(
-    schema: t.Dict,
+    schema: str,
     input_json: t.Dict,
 ) -> t.Tuple[bool, t.List[t.Dict]]:
     """runs the validation and returns valid (T|F) and packaged errors
@@ -25,7 +24,6 @@ def run(
         valid: True if the file passed validation, False otherwise
 
     """
-
     schema_validator = validator.JsonValidator(schema)
     valid, errors = schema_validator.validate(input_json)
 
