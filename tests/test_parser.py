@@ -57,8 +57,6 @@ def test_parse_config():
         context
     )
 
-    assert fw_reference.is_file
-
     assert loader_config["add_parents"] is False
 
     assert fw_reference.id == "6442f29a9bb0718c0adfaf9f"

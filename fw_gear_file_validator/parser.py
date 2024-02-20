@@ -66,10 +66,7 @@ def get_ext(input_file: Union[Path, str]) -> Union[str, None]:
 
 def validate_filetype(ext: str, mime: str) -> Union[str, None]:
     """Ensures detected filetype is supported and errors if not"""
-    if (
-        ext not in SUPPORTED_FILE_EXTENSIONS.keys()
-        and mime not in SUPPORTED_FLYWHEEL_MIMETYPES.keys()
-    ):
+    if ext not in SUPPORTED_FILE_EXTENSIONS.keys() and mime not in SUPPORTED_FLYWHEEL_MIMETYPES.keys():
         raise TypeError(f"file type {mime},{ext} is not supported")
     return
 
@@ -87,9 +84,7 @@ def get_filetype_data(input_file: Union[dict, str, Path]) -> (str, str):
     return ext, mime
 
 
-def identify_file_type(
-    ext: Union[str, None] = None, mime: Union[str, None] = None
-) -> str:
+def identify_file_type(ext: Union[str, None] = None, mime: Union[str, None] = None) -> str:
     """Given a flywheel config input file object, identify a valid file type if possible"""
     # see if the input file object has a value
     if ext:

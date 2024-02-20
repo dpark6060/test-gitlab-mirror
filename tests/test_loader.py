@@ -45,7 +45,7 @@ def test_loader_init():
     fw_reference.__post_init__()
     config = {"add_parents": True}
     loader = FwLoader(config=config)
-    validation_dict = loader.load_object(fw_reference)
+    validation_dict = loader.load_object(fw_reference.loc)
 
     client.get_file.assert_called()
     client.get_file().parents.keys.assert_called()
@@ -61,7 +61,7 @@ def test_loader_init():
 
     config = {"add_parents": False}
     loader = FwLoader(config=config)
-    validation_dict = loader.load_object(fw_reference)
+    validation_dict = loader.load_object(fw_reference.loc)
 
     client2.get_file.assert_called()
     client2.get_acquisition.assert_not_called()
