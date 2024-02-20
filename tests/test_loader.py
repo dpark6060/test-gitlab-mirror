@@ -40,7 +40,7 @@ def test_loader_init():
     client = MagicMock()
     context._client = client
 
-    fw_reference = FwReference.init_from_file(client, context.get_input("input_file"))
+    fw_reference = FwReference.init_from_file(client, context.get_input("input_file"), "flywheel")
     fw_reference.parents = {"acquisition": "1234"}
     fw_reference.__post_init__()
     config = {"add_parents": True}
@@ -54,7 +54,7 @@ def test_loader_init():
 
     client2 = MagicMock()
     fw_reference = FwReference.init_from_file(
-        client2, context.get_input("input_file")
+        client2, context.get_input("input_file"), "flywheel"
     )
     fw_reference.parents = {"acquisition": "1234"}
     fw_reference.__post_init__()
@@ -64,4 +64,3 @@ def test_loader_init():
     validation_dict = loader.load_object(fw_reference.loc)
 
     client2.get_file.assert_called()
-    client2.get_acquisition.assert_not_called()
