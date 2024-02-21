@@ -5,7 +5,6 @@ from pathlib import Path
 import pandas as pd
 
 from flywheel_gear_toolkit.utils.datatypes import Container
-from fw_gear_file_validator.utils import FwReference
 
 PARENT_INCLUDE = [
     # General values
